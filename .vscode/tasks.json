@@ -1,0 +1,70 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "terminal clear",
+			"command": "clear",
+			"detail": "terminal clear"
+		},
+		{
+			"type": "shell",
+			"label": "clear&date",
+			"command": "date",
+			"args": [
+				"+%Y/%m/%d %H:%M:%S"
+			],
+			"detail": "clear&date",
+			"dependsOn": [
+				"terminal clear",
+			]
+		},
+		{
+			"type": "shell",
+			"label": "echo_pwd",
+			"command": "echo",
+			"args": [
+				"${fileDirname}"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"detail": "echo pwd"
+		},
+		{
+			"type": "shell",
+			"label": "make_cpp",
+			"command": "make",
+			"args": [
+				"all"
+			],
+			"dependsOn": [
+				"clear&date",
+			],
+			"detail": "C/C++: make コンパイル",
+			"problemMatcher": [],
+			"group": "build",
+		},
+		{
+			"type": "shell",
+			"label": "make_and_run",
+			// "command": "./main",
+			"command": "time",
+			"args": [
+				"build/x86.bin",
+				"test/test_source.cpp"
+			],
+			"options": {
+				// "cwd": "${fileDirname}"
+			},
+			"dependsOn": [
+				"make_cpp"
+			],
+            "group": {
+				"kind": "build",
+                "isDefault": true,
+            },
+			"detail": "make & 実行"
+		},
+	]
+}

@@ -1,0 +1,4 @@
+{
+    "cquery.cacheDirectory": "${workspaceFolder}/.vscode/cquery_cached_index/",
+    "liveServer.settings.port": 5564,
+}

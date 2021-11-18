@@ -1,0 +1,129 @@
+.warningIcon {
+    display: block;
+    background-image: url('https://api.iconify.design/twemoji/warning.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.errorIcon {
+    display: block;
+    background-image: url('https://api.iconify.design/twemoji/cross-mark.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+a.btn {
+    position: relative;
+    display: inline-block;
+    padding: 5px 5px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: #212529;
+    border-radius: 0.5rem;
+}
+
+a.btn--run {
+    color: #fff;
+    background-color: #eb6100;
+}
+
+a.btn--run:hover {
+    color: #fff;
+    background: #f56500;
+}
+
+a.btn--running {
+    color: #fff;
+    background-color: #e6bfa3;
+    pointer-events: none;
+}
+
+
+
+
+
+
+
+
+
+
+.dropdown_menu ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.dropdown_menu a {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+.dropdown_menu .nav {
+    display: flex;
+    /* width: 310px; */
+}
+
+.dropdown_menu .nav>li {
+    position: relative;
+    /* width: 100px; */
+    border-right: 1px solid #0071b9;
+}
+
+.dropdown_menu .nav>li:first-child {
+    border-left: 1px solid #0071b9;
+}
+
+.dropdown_menu .nav a {
+    display: block;
+    line-height: 1;
+    z-index: 1;
+}
+
+.dropdown_menu .nav {
+    flex-flow: row wrap;
+}
+
+.dropdown_menu .nav a {
+    padding: 0.5em 0;
+    font-size: 16px;
+    color: #0071b9;
+    text-align: center;
+}
+
+.dropdown_menu .sub {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 2em;
+    width: 100%;
+    min-height: 0;
+    height: 0;
+    z-index: 3;
+    transition: min-height 0.5s;
+}
+
+.dropdown_menu .sub>li>a {
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.75;
+    background-color: #0071b9;
+}
+
+.dropdown_menu .sub>li>a:hover {
+    background-color: #004b83;
+    opacity: 1;
+}
+
+.dropdown_menu .sub.active {
+    min-height: 180px;
+}
