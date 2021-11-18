@@ -4,7 +4,8 @@
   "description": "https://emscripten.org/docs/getting_started/downloads.html https://qiita.com/soramimi_jp/items/1b7ed0ddcefb0f4a7172 https://www.slideshare.net/llamerada-jp/ccwebassembly",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "mkdir -p build/node_modules/monaco-editor/min/vs&&cp -r node_modules/monaco-editor/min/vs/. build/node_modules/monaco-editor/min/vs&&cp -r lib/ *.js *.css *.html build"
   },
   "author": "TumoiYorozu",
   "license": "ISC",
