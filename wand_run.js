@@ -280,6 +280,9 @@ function get_message_easy_to_understand(text) {
     if (m = text.match(/comparing floating point with == or != is unsafe/)) {
         return "「==」や「!=」を使って、double や float などの浮動小数点数の比較をするのは、誤差の観点から安全ではありません。整数での計算に置き換えるか、誤差を考慮して「<」や「>」で置き換えられないか検討しましょう。" + did_you_mean;
     }
+    if (m = text.match(/statement has no effect/)) {
+        return "この文は何の効果ももらたしていません。何か書き間違えをしていませんか。" + did_you_mean;
+    }
     return "" + did_you_mean;
 }
 
