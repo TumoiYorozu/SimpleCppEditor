@@ -220,6 +220,9 @@ function get_message_easy_to_understand(text) {
         }
         return "宣言されてない変数「" + m[1] + "」が使用されました。C++では使用する変数をあらかじめ宣言して用意する必要があります。" + did_you_mean;
     }
+    if (m = text.match(/redeclaration of '(.+?)'/)) {
+        return "「" + m[1] + "」が再宣言されました。前に同名の変数を宣言していませんか。" + did_you_mean;
+    }
     if (m = text.match(/expected '(.+?)' before '(.+?)'/)) {
         return "「" + m[2] + "」の前に、「" + m[1] + "」が来ることが期待されています。どこかで「" + m[1] + "」を忘れていませんか。" + did_you_mean;
     }
