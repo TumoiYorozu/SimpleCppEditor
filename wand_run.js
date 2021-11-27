@@ -271,8 +271,14 @@ function get_message_easy_to_understand(text) {
     if (m = text.match(/unused variable '(.+?)'/)) {
         return "変数「" + m[1] + "」は使用されていません。" + did_you_mean;
     }
+    if (m = text.match(/declaration of '(.+?)' shadows/)) {
+        return "変数「" + m[1] + "」が、外側にも同名の変数があり、重複しています。" + did_you_mean;
+    }
     if (m = text.match(/suggest parentheses around assignment used as truth value/)) {
         return "値を比較するのに「==」ではなく「=」を使用していませんか。" + did_you_mean;
+    }
+    if (m = text.match(/comparing floating point with == or != is unsafe/)) {
+        return "「==」や「!=」を使って、double や float などの浮動小数点数の比較をするのは、誤差の観点から安全ではありません。整数での計算に置き換えるか、誤差を考慮して「<」や「>」で置き換えられないか検討しましょう。" + did_you_mean;
     }
     return "" + did_you_mean;
 }
@@ -355,7 +361,10 @@ const cpp_options = [
     "-std=gnu++17",
     "-Wall",
     "-Wextra",
-    "-Wno-sign-compare",
+    "-Wno-sign-compare", // 符号無し整数の比較警告を抑制
+    "-Wfloat-equal",     // 浮動小数点数を == で比較していると警告する
+    "-Winit-self",       // int i = i; など未定義の変数が自分を初期化すると警告する
+    "-Wshadow",          // 名前被りに対して警告する
     "-g",
     "-fsanitize=undefined",
     "-D_GLIBCXX_DEBUG",
