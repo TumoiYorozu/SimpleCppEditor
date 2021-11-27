@@ -355,6 +355,7 @@ const cpp_options = [
     "-std=gnu++17",
     "-Wall",
     "-Wextra",
+    "-Wno-sign-compare",
     "-g",
     "-fsanitize=undefined",
     "-D_GLIBCXX_DEBUG",
