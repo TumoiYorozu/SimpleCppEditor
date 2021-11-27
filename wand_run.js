@@ -223,6 +223,12 @@ function get_message_easy_to_understand(text) {
     if (m = text.match(/redeclaration of '(.+?)'/)) {
         return "「" + m[1] + "」が再宣言されました。前に同名の変数を宣言していませんか。" + did_you_mean;
     }
+    if (m = text.match(/redefinition of '(.+?)'/)) {
+        return "「" + m[1] + "」が再定義されました。前に同じ関数を宣言していませんか。" + did_you_mean;
+    }
+    if (m = text.match(/'(.+?)' redeclared as different kind of entity/)) {
+        return "「" + m[1] + "」が再定義されました。前に同名の変数や関数を宣言していませんか。" + did_you_mean;
+    }
     if (m = text.match(/conflicting declaration '(.+?)'/)) {
         return "「" + m[1] + "」の宣言が衝突しました。前に同名の変数や関数を宣言していませんか。" + did_you_mean;
     }
