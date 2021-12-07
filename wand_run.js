@@ -280,6 +280,9 @@ function get_message_easy_to_understand(text) {
     if (m = text.match(/(.+?): No such file or directory/)) {
         return "「" + m[1] + "」と言うファイルは見つかりませんでした。名前を間違えていないか確認してください。" + did_you_mean;
     }
+    if (m = text.match(/assignment of read-only variable '(.+?)'/)) {
+        return "変数「" + m[1] + "」は書き換えができない変数です。" + did_you_mean;
+    }
 
     // warnings
     if (m = text.match(/'(.+?)' may be used uninitialized in this function/)) {
