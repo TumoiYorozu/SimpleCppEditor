@@ -220,7 +220,10 @@ function get_message_easy_to_understand(text) {
                 return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include <" + include_relationship[m[1]] + ">」を書かないといけません。" + did_you_mean;
             }
         }
-        return "宣言されてない変数「" + m[1] + "」が使用されました。C++では使用する変数をあらかじめ宣言して用意する必要があります。" + did_you_mean;
+        if (m[1] == "end1") {
+            return "宣言されてない変数「" + m[1] + "」が使用されました。「endl」(最後の文字は数字の1ではなく、小文字のL) の間違いではありませんか。" + did_you_mean;
+        }
+        return "宣言されてない変数「" + m[1] + "」が使用されました。C++では使用する変数をあらかじめ宣言して用意する必要があります。他にもタイピングミスの可能性もあります。" + did_you_mean;
     }
     if (m = text.match(/redeclaration of '(.+?)'/)) {
         return "「" + m[1] + "」が再宣言されました。前に同名の変数を宣言していませんか。" + did_you_mean;
