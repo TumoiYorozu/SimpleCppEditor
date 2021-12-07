@@ -1,4 +1,3 @@
-
 // Module.onRuntimeInitialized = function () {
 //     _initialized();
 // }
@@ -67,7 +66,7 @@ const cpp_editor_options = Object.assign({
 
 const io_editor_options = Object.assign({
     language: 'myCustomLanguage',
-	// theme: 'myCustomTheme',
+    // theme: 'myCustomTheme',
     lineNumbers: false,
     scrollBeyondLastLine: false,
     renderWhitespace: false,
@@ -76,6 +75,7 @@ const io_editor_options = Object.assign({
 
 
 var edit_counter = 0;
+
 function editor_auto_save(c) {
     if (edit_counter != c) return;
     const text = source_editor.getValue();
@@ -97,19 +97,19 @@ function changed_font_size() {
     localStorage.setItem('fonst_size', new_fonst_size);
 }
 
-require(['vs/editor/editor.main'], function () {
+require(['vs/editor/editor.main'], function() {
     monaco.languages.register({
         id: 'myCustomLanguage'
     });
     monaco.languages.setMonarchTokensProvider('myCustomLanguage', {
         tokenizer: {
             root: [
-                [/(error|ERROR|Error).*/,  "constant"], // "invalid"
+                [/(error|ERROR|Error).*/, "constant"], // "invalid"
                 [/[0-9]+/, "number.hex"],
             ],
         }
     });
-    
+
     source_editor = monaco.editor.create(document.getElementById('source_editor_container'), cpp_editor_options);
     source_editor.getModel().onDidChangeContent((event) => {
         ++edit_counter;
@@ -136,9 +136,9 @@ require(['vs/editor/editor.main'], function () {
         wand_run();
     })
     input_editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-        editor_auto_save(++edit_counter);
-    })
-    //////
+            editor_auto_save(++edit_counter);
+        })
+        //////
     output_editor = monaco.editor.create(document.getElementById('output_editor_container'),
         Object.assign({
             value: "",
@@ -174,6 +174,7 @@ function showMessage() {
 function monaco_reset_text(editor, text = "") {
     editor.setValue(text);
 }
+
 function monaco_add_text(editor, text) {
     const isBottom = editor.getScrollTop() + editor.getDomNode().clientHeight + 1 >= editor.getContentHeight();
     editor.setValue(editor.getValue() + text);
@@ -193,12 +194,13 @@ function reset_editor_compile_error_glyph() {
 }
 
 const include_relationship = {
-    string : "string",
-    cin    : "iostream",
-    cout   : "iostream",
-    endl   : "iostream",
-    vector : "vector",
+    string: "string",
+    cin: "iostream",
+    cout: "iostream",
+    endl: "iostream",
+    vector: "vector",
 }
+
 function get_message_easy_to_understand(text) {
     var m;
     const did_you_mean = ((m = text.match(/did you mean '(.+?)'\?/)) ? ("\n（もしかして「" + m[1] + "」の間違いですか？）") : "");
@@ -213,7 +215,7 @@ function get_message_easy_to_understand(text) {
         if (m[1] in include_relationship) {
             if (m[1] == "string") {
                 return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include <" + include_relationship[m[1]] + ">」を書かないといけません。\n" +
-                       "そしてさらに「std::" + m[1] + "」と書くか、プログラムの先頭で「using namespace std;」を書かないといけません。" + did_you_mean;
+                    "そしてさらに「std::" + m[1] + "」と書くか、プログラムの先頭で「using namespace std;」を書かないといけません。" + did_you_mean;
             } else {
                 return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include <" + include_relationship[m[1]] + ">」を書かないといけません。" + did_you_mean;
             }
@@ -258,10 +260,10 @@ function get_message_easy_to_understand(text) {
         return "半角文字以外が混じっています。C++では全角文字・全角スペース・全角記号などは使用できません。" + did_you_mean;
     }
     if (m = text.match(/no match for 'operator(.+?)' \(operand types are '(.+?)'( \{aka.*?'\})? and '(.+?)'/)) {
-        return m[2] + " (左辺)と " + m[4] + " (右辺)を演算子「" +m[1] +"」を使って演算はできません。" + did_you_mean;
+        return m[2] + " (左辺)と " + m[4] + " (右辺)を演算子「" + m[1] + "」を使って演算はできません。" + did_you_mean;
     }
     if (m = text.match(/invalid operands of types '(.+?)'( \{aka.*?'\})? and '(.+?)'( \{aka.*?'\})? to binary 'operator(.+?)'/)) {
-        return m[1] + " (左辺)と " + m[3] + " (右辺)を演算子「" +m[5] +"」を使って演算はできません。" + did_you_mean;
+        return m[1] + " (左辺)と " + m[3] + " (右辺)を演算子「" + m[5] + "」を使って演算はできません。" + did_you_mean;
     }
     if (m = text.match(/incompatible types in assignment of '(.+?)' to '(.+?)'/)) {
         return "「" + m[2] + "」型に「" + m[1] + "」型の値は入れられません。型や添字が合っているか確認してください。" + did_you_mean;
@@ -274,6 +276,9 @@ function get_message_easy_to_understand(text) {
     }
     if (m = text.match(/cannot declare '::main' to be a global variable/)) {
         return "「int main()」の「()」を忘れていませんか。" + did_you_mean;
+    }
+    if (m = text.match(/(.+?): No such file or directory/)) {
+        return "「" + m[1] + "」と言うファイルは見つかりませんでした。名前を間違えていないか確認してください。" + did_you_mean;
     }
 
     // warnings
@@ -310,7 +315,7 @@ function get_runtime_message_easy_to_understand(text) {
 }
 
 
-const error_waring_pattern  = /^prog.cc:(\d+):(\d+): (warning|error): (.*)$/;
+const error_waring_pattern = /^prog.cc:(\d+):(\d+): (warning|error|fatal error): (.*)$/;
 const runtime_error_pattern = /^prog.cc:(\d+):(\d+): (runtime error): (.*)$/;
 const message_token_pattern = /^.*?'(.+?)'.*$/;
 const remove_escape_sequence_pattern = /\x1b\[\d\d?(;\d\d?)?(;\d\d?)?[m]/g;
@@ -319,9 +324,9 @@ function parse_compile_message(text, is_runtime) {
     // console.log("parse_compile_message", text);
 
     const txt_array = text.split('\n');
-    var prev    = source_editor.decorations || [];
+    var prev = source_editor.decorations || [];
     var markers = source_editor.markers || [];
-    
+
     for (var i in txt_array) {
         const m = txt_array[i].match(is_runtime ? runtime_error_pattern : error_waring_pattern);
         // console.log("###", txt_array[i], m);
@@ -330,7 +335,7 @@ function parse_compile_message(text, is_runtime) {
             // console.log("------------");
 
             const easy_message = is_runtime ? get_runtime_message_easy_to_understand(m[4]) : get_message_easy_to_understand(m[4]);
-            
+
             const e = {
                 line: parseInt(m[1]),
                 col: parseInt(m[2]),
@@ -348,7 +353,7 @@ function parse_compile_message(text, is_runtime) {
             const newDecorations = [{
                 range: new monaco.Range(e.line, e.col, e.line, e.col),
                 options: {
-                    glyphMarginClassName: e.severity === 'warning' ? 'warningIcon' : 'errorIcon' ,
+                    glyphMarginClassName: e.severity === 'warning' ? 'warningIcon' : 'errorIcon',
                     // inlineClassName: e.severity === 'warning' ? 'warningLine' :  'errorLine',
                     glyphMarginHoverMessage: { value: e.message },
                 },
@@ -377,9 +382,9 @@ const cpp_options = [
     "-Wall",
     "-Wextra",
     "-Wno-sign-compare", // 符号無し整数の比較警告を抑制
-    "-Wfloat-equal",     // 浮動小数点数を == で比較していると警告する
-    "-Winit-self",       // int i = i; など未定義の変数が自分を初期化すると警告する
-    "-Wshadow",          // 名前被りに対して警告する
+    "-Wfloat-equal", // 浮動小数点数を == で比較していると警告する
+    "-Winit-self", // int i = i; など未定義の変数が自分を初期化すると警告する
+    "-Wshadow", // 名前被りに対して警告する
     "-g",
     "-fsanitize=undefined",
     "-D_GLIBCXX_DEBUG",
@@ -389,15 +394,16 @@ const cpp_options = [
 
 
 var is_wand_running = false;
+
 function set_wand_running_state(running) {
     var btn = document.getElementById('wand_run_btn');
     if (running) {
         is_wand_running = true;
-        btn.className   = 'btn btn--running'
+        btn.className = 'btn btn--running'
         btn.textContent = "実行中…";
     } else {
         is_wand_running = false;
-        btn.className   = 'btn btn--run'
+        btn.className = 'btn btn--run'
         btn.textContent = "実行";
     }
 };
@@ -413,7 +419,7 @@ function wand_run() {
         "stdin": input_editor.getValue(),
         "compiler-option-raw": cpp_options.join('\n'),
         "compiler": "gcc-9.1.0"
-        // "compiler": "clang-10.0.0"
+            // "compiler": "clang-10.0.0"
     }
     const wand_send_json = JSON.stringify(wand_send);
     // console.log(wand_send_json);
@@ -493,19 +499,19 @@ var parent = document.querySelectorAll(".has-sub");
 
 var node = Array.prototype.slice.call(parent, 0);
 
-node.forEach(function (element) {
-  element.addEventListener(
-    "mouseover",
-    function () {
-      element.querySelector(".sub").classList.add("active");
-    },
-    false
-  );
-  element.addEventListener(
-    "mouseout",
-    function () {
-      element.querySelector(".sub").classList.remove("active");
-    },
-    false
-  );
+node.forEach(function(element) {
+    element.addEventListener(
+        "mouseover",
+        function() {
+            element.querySelector(".sub").classList.add("active");
+        },
+        false
+    );
+    element.addEventListener(
+        "mouseout",
+        function() {
+            element.querySelector(".sub").classList.remove("active");
+        },
+        false
+    );
 });
