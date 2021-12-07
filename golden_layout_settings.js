@@ -1,4 +1,3 @@
-
 const GridComponent_Commmon = {
     type: 'component',
     componentName: 'testComponent',
@@ -34,51 +33,48 @@ const GridComponent_Help = Object.assign({
 
 
 const config_landscape = {
-    settings:{
+    settings: {
         showPopoutIcon: false,
     },
     content: [{
         type: 'column',
-        content:[
-            {
+        content: [{
                 type: 'row',
                 height: 70,
-                content:[
-                    {
+                content: [{
                         type: 'stack',
-                        width:  75,
-                        content:[GridComponent_Source, GridComponent_Help]
+                        width: 75,
+                        content: [GridComponent_Source, GridComponent_Help]
                     },
                     {
                         type: 'column',
-                        content:[GridComponent_Input, GridComponent_Output]
+                        content: [GridComponent_Input, GridComponent_Output]
                     }
                 ]
             },
-            GridComponent_Message]
+            GridComponent_Message
+        ]
     }]
 };
 
 const config_default = {
-    settings:{
+    settings: {
         showPopoutIcon: false,
     },
     parentId: "main",
-    dimensions: {
-    },
+    dimensions: {},
     content: [{
         type: 'column',
-        content:[
-            {
+        content: [{
                 type: 'stack',
                 height: 60,
-                content:[GridComponent_Source, GridComponent_Help]
-                // content:[GridComponent_Help, GridComponent_Source]
+                content: [GridComponent_Source, GridComponent_Help]
+                    // content:[GridComponent_Help, GridComponent_Source]
             },
             {
                 type: 'row',
                 height: 15,
-                content:[GridComponent_Input, GridComponent_Output]
+                content: [GridComponent_Input, GridComponent_Output]
             },
             GridComponent_Message,
         ]
@@ -86,15 +82,16 @@ const config_default = {
 };
 
 var myLayout, savedState = localStorage.getItem('GoldenLayout_savedState');
-if(savedState !== null) {
+if (savedState !== null) {
     try {
         savedState = JSON.parse(savedState)
-    } catch(e) {
+        savedState.maximisedItemId = null;
+    } catch (e) {
         savedState = null;
     }
 }
 
-if(savedState !== null) {
+if (savedState !== null) {
     myLayout = new GoldenLayout(savedState);
 } else {
     myLayout = new GoldenLayout(config_default);
@@ -102,27 +99,28 @@ if(savedState !== null) {
 
 var myLayout_containers = {};
 
-myLayout.registerComponent('testComponent', function( container, componentState ){
+myLayout.registerComponent('testComponent', function(container, componentState) {
     var html;
-    if (componentState.label == 'Source')  html = '<div id="source_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
-    if (componentState.label == 'Input')   html = '<div id="input_editor_container"  style="width: 100%; height: 100%; margin: 0;"></div>';
-    if (componentState.label == 'Output')  html = '<div id="output_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
+    if (componentState.label == 'Source') html = '<div id="source_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
+    if (componentState.label == 'Input') html = '<div id="input_editor_container"  style="width: 100%; height: 100%; margin: 0;"></div>';
+    if (componentState.label == 'Output') html = '<div id="output_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
     if (componentState.label == 'Message') html = '<div id="message_container"       style="width: 100%; height: 100%; margin: 0;"></div>';
-    if (componentState.label == 'Help')    html = document.getElementById("help");
+    if (componentState.label == 'Help') html = document.getElementById("help");
 
     myLayout_containers[componentState.label] = container;
     container.getElement().html(html);
 });
-myLayout.registerComponent('SourceComponent', function( container, componentState ){
+myLayout.registerComponent('SourceComponent', function(container, componentState) {
     var html;
-    if (componentState.label == 'Source')  html = '<div id="source_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
+    if (componentState.label == 'Source') html = '<div id="source_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
     container.getElement().html(html);
 });
 
-myLayout.on('stateChanged', function(){
-    const state = JSON.stringify(myLayout.toConfig());
+myLayout.on('stateChanged', function() {
+    var state = myLayout.toConfig();
+    state = JSON.stringify(state);
     localStorage.setItem('GoldenLayout_savedState', state);
-    myLayout_containers.Input.setTitle(myLayout_containers.Input.width 　< 150 ? "入力" : "プログラムへの入力");
+    myLayout_containers.Input.setTitle(myLayout_containers.Input.width　 < 150 ? "入力" : "プログラムへの入力");
     myLayout_containers.Output.setTitle(myLayout_containers.Output.width < 150 ? "出力" : "プログラムの出力");
 });
 
@@ -144,4 +142,3 @@ function reset_golden_layout(layout) {
 }
 
 document.getElementById('help_cpp_options').textContent = cpp_options.join(' ');
-
