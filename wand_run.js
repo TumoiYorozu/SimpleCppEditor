@@ -15,7 +15,7 @@ if (previous_source_text != null) {
     previous_source_text = decodeURIComponent(previous_source_text);
 } else {
     previous_source_text = [
-        '#include <iostream>',
+        '#include <bits/stdc++.h>',
         'using namespace std;',
         '',
         'int main () {',
