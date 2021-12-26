@@ -206,7 +206,7 @@ function get_message_easy_to_understand(text) {
     const did_you_mean = ((m = text.match(/did you mean '(.+?)'\?/)) ? ("\n（もしかして「" + m[1] + "」の間違いですか？）") : "");
 
     if ((m = text.match(/'(.+?)' is not a member of 'std'/)) && (m[1] in include_relationship)) {
-        return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include <" + include_relationship[m[1]] + ">」を書かないといけません。" + did_you_mean;
+        return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include &lt;" + include_relationship[m[1]] + "&gt;」を書かないといけません。" + did_you_mean;
     }
     if ((m = text.match(/'(.+?)' was not declared in this scope; did you mean 'std::(.+?)'\?/)) && m[1] == m[2]) {
         return "「" + m[1] + "」を使用するためには「std::" + m[1] + "」と書き直すか、プログラムの先頭で「using namespace std;」を書かないといけません。" + did_you_mean;
@@ -214,10 +214,10 @@ function get_message_easy_to_understand(text) {
     if (m = text.match(/'(.+?)' was not declared in this scope/)) {
         if (m[1] in include_relationship) {
             if (m[1] == "string") {
-                return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include <" + include_relationship[m[1]] + ">」を書かないといけません。\n" +
+                return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include &lt;" + include_relationship[m[1]] + "&gt;」を書かないといけません。\n" +
                     "そしてさらに「std::" + m[1] + "」と書くか、プログラムの先頭で「using namespace std;」を書かないといけません。" + did_you_mean;
             } else {
-                return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include <" + include_relationship[m[1]] + ">」を書かないといけません。" + did_you_mean;
+                return "「" + m[1] + "」を使用するためには、プログラムの先頭で「#include &lt;" + include_relationship[m[1]] + "&gt;」を書かないといけません。" + did_you_mean;
             }
         }
         if (m[1] == "end1") {
@@ -301,7 +301,7 @@ function get_message_easy_to_understand(text) {
         return "値を比較するのに「==」ではなく「=」を使用していませんか。" + did_you_mean;
     }
     if (m = text.match(/comparing floating point with == or != is unsafe/)) {
-        return "「==」や「!=」を使って、double や float などの浮動小数点数の比較をするのは、誤差の観点から安全ではありません。整数での計算に置き換えるか、誤差を考慮して「<」や「>」で置き換えられないか検討しましょう。" + did_you_mean;
+        return "「==」や「!=」を使って、double や float などの浮動小数点数の比較をするのは、誤差の観点から安全ではありません。整数での計算に置き換えるか、誤差を考慮して「&lt;」や「&gt;」で置き換えられないか検討しましょう。" + did_you_mean;
     }
     if (m = text.match(/statement has no effect/)) {
         return "この文は何の効果ももらたしていません。何か書き間違えをしていませんか。" + did_you_mean;
