@@ -424,7 +424,7 @@ function wand_run() {
         "code": source_editor.getValue(),
         "stdin": input_editor.getValue(),
         "compiler-option-raw": cpp_options.join('\n'),
-        "compiler": "gcc-9.1.0"
+        "compiler": "gcc-9.3.0"
             // "compiler": "clang-10.0.0"
     }
     const wand_send_json = JSON.stringify(wand_send);
