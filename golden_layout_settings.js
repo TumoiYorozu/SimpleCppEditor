@@ -101,10 +101,10 @@ var myLayout_containers = {};
 
 myLayout.registerComponent('testComponent', function(container, componentState) {
     var html;
-    if (componentState.label == 'Source') html = '<div id="source_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
-    if (componentState.label == 'Input') html = '<div id="input_editor_container"  style="width: 100%; height: 100%; margin: 0;"></div>';
-    if (componentState.label == 'Output') html = '<div id="output_editor_container" style="width: 100%; height: 100%; margin: 0;"></div>';
-    if (componentState.label == 'Message') html = '<div id="message_container"       style="width: 100%; height: 100%; margin: 0;"></div>';
+    if (componentState.label == 'Source') html = document.getElementById("source_editor_container");
+    if (componentState.label == 'Input') html = document.getElementById("input_editor_container");
+    if (componentState.label == 'Output') html = document.getElementById("output_editor_container");
+    if (componentState.label == 'Message') html = document.getElementById("message_editor_container");
     if (componentState.label == 'Help') html = document.getElementById("help");
 
     myLayout_containers[componentState.label] = container;

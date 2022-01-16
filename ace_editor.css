@@ -1,0 +1,7 @@
+.ace_invisible {
+    color: rgba(191, 191, 191, 0.3) !important
+}
+
+.ace_invisible_eol {
+    color: rgba(191, 191, 191, 0.2) !important
+}

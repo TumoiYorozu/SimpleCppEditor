@@ -1,175 +1,116 @@
 // Module.onRuntimeInitialized = function () {
 //     _initialized();
 // }
-require.config({
-    paths: { 'vs': './node_modules/monaco-editor/min/vs' },
-    'vs/nls': { availableLanguages: { '*': 'ja' } }
-});
-
-var previous_source_text = localStorage.getItem('source_editor');
-var previous_input_text = localStorage.getItem('input_editor');
-var previous_font_size = localStorage.getItem('fonst_size');
+// require.config({
+//     paths: { 'vs': './node_modules/monaco-editor/min/vs' },
+//     'vs/nls': { availableLanguages: { '*': 'ja' } }
+// });
 
 
-if (previous_source_text != null) {
-    previous_source_text = decodeURIComponent(previous_source_text);
-} else {
-    previous_source_text = [
-        '#include <bits/stdc++.h>',
-        'using namespace std;',
-        '',
-        'int main () {',
-        '    string name;',
-        '    cin >> name;',
-        '    cout << "Hello, " << name << "!" << endl;',
-        '',
-        '    int a = 0;',
-        '    int b = 1;',
-        '    for(int i = 0; i < 10; i++) {',
-        '        int c = a + b;',
-        '        cout << b << " ";',
-        '        a = b;',
-        '        b = c;',
-        '    }',
-        '    cout << endl;',
-        '}',
-    ].join('\n');
-}
-if (previous_input_text != null) {
-    previous_input_text = decodeURIComponent(previous_input_text);
-} else {
-    previous_input_text = "Takahashi";
-}
 
-//  const new_fonst_size = source_editor.getOption(monaco.editor.EditorOption.fontSize);
+//  const new_fonst_size = source_editor_monaco.getOption(monaco.editor.EditorOption.fontSize);
 
-const editor_options = {
-    minimap: { enabled: false },
-    bracketPairColorization: { enabled: true },
-    mouseWheelZoom: true,
-    automaticLayout: true,
-    renderControlCharacters: true,
-    lineDecorationsWidth: 0,
-    copyWithSyntaxHighlighting: false,
-    // stickyTabStops: true,
-    useTabStops: true,
-    fontSize: previous_font_size,
-}
+// const editor_options = {
+//     minimap: { enabled: false },
+//     bracketPairColorization: { enabled: true },
+//     mouseWheelZoom: true,
+//     automaticLayout: true,
+//     renderControlCharacters: true,
+//     lineDecorationsWidth: 0,
+//     copyWithSyntaxHighlighting: false,
+//     // stickyTabStops: true,
+//     useTabStops: true,
+//     fontSize: previous_font_size,
+// }
 
-const cpp_editor_options = Object.assign({
-    language: 'cpp',
-    value: previous_source_text,
-    renderWhitespace: true,
-    lineNumbersMinChars: 2,
-    glyphMargin: true,
-}, editor_options);
+// const cpp_editor_options = Object.assign({
+//     language: 'cpp',
+//     value: previous_source_text,
+//     renderWhitespace: true,
+//     lineNumbersMinChars: 2,
+//     glyphMargin: true,
+// }, editor_options);
 
-const io_editor_options = Object.assign({
-    language: 'myCustomLanguage',
-    // theme: 'myCustomTheme',
-    lineNumbers: false,
-    scrollBeyondLastLine: false,
-    renderWhitespace: false,
-    folding: false,
-}, editor_options);
+// const io_editor_options = Object.assign({
+//     language: 'myCustomLanguage',
+//     // theme: 'myCustomTheme',
+//     lineNumbers: false,
+//     scrollBeyondLastLine: false,
+//     renderWhitespace: false,
+//     folding: false,
+// }, editor_options);
 
 
-var edit_counter = 0;
 
-function editor_auto_save(c) {
-    if (edit_counter != c) return;
-    const text = source_editor.getValue();
-    if (text == null || text == "") return;
-    // console.log("editor save!");
-    // document.cookie = 'source_editor=' + encodeURIComponent(text);
-    // document.cookie = 'input_editor=' + encodeURIComponent(input_editor.getValue());
-    localStorage.setItem('source_editor', encodeURIComponent(text));
-    localStorage.setItem('input_editor', encodeURIComponent(input_editor.getValue()));
-}
 
-var source_editor;
-var input_editor;
-var output_editor;
-var message_editor;
+
+var source_editor_monaco;
+var input_editor_monaco;
+var output_editor_monaco;
+var message_editor_monaco;
 
 function changed_font_size() {
-    const new_fonst_size = source_editor.getOption(monaco.editor.EditorOption.fontSize);
+    const new_fonst_size = source_editor_monaco.getOption(monaco.editor.EditorOption.fontSize);
     localStorage.setItem('fonst_size', new_fonst_size);
 }
 
-require(['vs/editor/editor.main'], function() {
-    monaco.languages.register({
-        id: 'myCustomLanguage'
-    });
-    monaco.languages.setMonarchTokensProvider('myCustomLanguage', {
-        tokenizer: {
-            root: [
-                [/(error|ERROR|Error).*/, "constant"], // "invalid"
-                [/[0-9]+/, "number.hex"],
-            ],
-        }
-    });
+// require(['vs/editor/editor.main'], function() {
+//     monaco.languages.register({
+//         id: 'myCustomLanguage'
+//     });
+//     monaco.languages.setMonarchTokensProvider('myCustomLanguage', {
+//         tokenizer: {
+//             root: [
+//                 [/(error|ERROR|Error).*/, "constant"], // "invalid"
+//                 [/[0-9]+/, "number.hex"],
+//             ],
+//         }
+//     });
 
-    source_editor = monaco.editor.create(document.getElementById('source_editor_container'), cpp_editor_options);
-    source_editor.getModel().onDidChangeContent((event) => {
-        ++edit_counter;
-        setTimeout(editor_auto_save, 3000, edit_counter);
-    });
-    source_editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-        wand_run();
-    })
-    source_editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-        editor_auto_save(++edit_counter);
-    })
-    source_editor.onDidContentSizeChange(changed_font_size);
+//     source_editor_monaco = monaco.editor.create(document.getElementById('source_editor_monaco_container'), cpp_editor_options);
+//     source_editor_monaco.getModel().onDidChangeContent((event) => {
+//         ++edit_counter;
+//         setTimeout(editor_auto_save, 3000, edit_counter);
+//     });
+//     source_editor_monaco.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+//         wand_run();
+//     })
+//     source_editor_monaco.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+//         editor_auto_save(++edit_counter);
+//     })
+//     source_editor_monaco.onDidContentSizeChange(changed_font_size);
 
-    //////
-    input_editor = monaco.editor.create(document.getElementById('input_editor_container'),
-        Object.assign({
-            value: previous_input_text,
-        }, io_editor_options));
-    input_editor.getModel().onDidChangeContent((event) => {
-        ++edit_counter;
-        setTimeout(editor_auto_save, 3000, edit_counter);
-    });
-    input_editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-        wand_run();
-    })
-    input_editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-            editor_auto_save(++edit_counter);
-        })
-        //////
-    output_editor = monaco.editor.create(document.getElementById('output_editor_container'),
-        Object.assign({
-            value: "",
-            readOnly: true,
-        }, io_editor_options));
-    //////
-    message_editor = monaco.editor.create(document.getElementById('message_container'),
-        Object.assign({
-            value: [
-                'message',
-            ].join('\n'),
-            readOnly: true,
-            wordWrap: "on",
-        }, io_editor_options));
-});
-
-
-
-
-
-document.addEventListener('keydown', (event) => {
-    if (event.ctrlKey && event.key == 'Shift') {
-        showMessage();
-    }
-});
-
-function showMessage() {
-    var text = source_editor.getValue();
-    // alert(text);
-    test1(text);
-}
+//     //////
+//     input_editor_monaco = monaco.editor.create(document.getElementById('input_editor_monaco_container'),
+//         Object.assign({
+//             value: previous_input_text,
+//         }, io_editor_options));
+//     input_editor_monaco.getModel().onDidChangeContent((event) => {
+//         ++edit_counter;
+//         setTimeout(editor_auto_save, 3000, edit_counter);
+//     });
+//     input_editor_monaco.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+//         wand_run();
+//     })
+//     input_editor_monaco.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+//             editor_auto_save(++edit_counter);
+//         })
+//         //////
+//     output_editor_monaco = monaco.editor.create(document.getElementById('output_editor_monaco_container'),
+//         Object.assign({
+//             value: "",
+//             readOnly: true,
+//         }, io_editor_options));
+//     //////
+//     message_editor_monaco = monaco.editor.create(document.getElementById('message_container'),
+//         Object.assign({
+//             value: [
+//                 'message',
+//             ].join('\n'),
+//             readOnly: true,
+//             wordWrap: "on",
+//         }, io_editor_options));
+// });
 
 function monaco_reset_text(editor, text = "") {
     editor.setValue(text);
@@ -184,12 +125,12 @@ function monaco_add_text(editor, text) {
 }
 
 function reset_editor_compile_error_glyph() {
-    if (source_editor.decorations != null) {
-        source_editor.decorations = source_editor.deltaDecorations(source_editor.decorations, []);
+    if (source_editor_monaco.decorations != null) {
+        source_editor_monaco.decorations = source_editor_monaco.deltaDecorations(source_editor_monaco.decorations, []);
     }
-    if (source_editor.markers) {
-        source_editor.markers = [];
-        monaco.editor.setModelMarkers(source_editor.getModel(), 'compile_message', source_editor.markers);
+    if (source_editor_monaco.markers) {
+        source_editor_monaco.markers = [];
+        monaco.editor.setModelMarkers(source_editor_monaco.getModel(), 'compile_message', source_editor_monaco.markers);
     }
 }
 
@@ -330,8 +271,8 @@ function parse_compile_message(text, is_runtime) {
     // console.log("parse_compile_message", text);
 
     const txt_array = text.split('\n');
-    var prev = source_editor.decorations || [];
-    var markers = source_editor.markers || [];
+    var prev = source_editor_monaco.decorations || [];
+    var markers = source_editor_monaco.markers || [];
 
     for (var i in txt_array) {
         const m = txt_array[i].match(is_runtime ? runtime_error_pattern : error_waring_pattern);
@@ -348,7 +289,7 @@ function parse_compile_message(text, is_runtime) {
                 severity: m[3],
                 message: m[3] + ": " + m[4] + (easy_message == "" ? "" : ("\n" + easy_message))
             }
-            const line_tokens = source_editor.getModel().getLineTokens(e.line);
+            const line_tokens = source_editor_monaco.getModel().getLineTokens(e.line);
             const token_end = line_tokens.getEndOffset(line_tokens.findTokenIndexAtOffset(e.col));
             const token_len_A = token_end - e.col;
             const message_token = m[4].match(message_token_pattern);
@@ -364,7 +305,7 @@ function parse_compile_message(text, is_runtime) {
                     glyphMarginHoverMessage: { value: e.message },
                 },
             }];
-            const r = source_editor.deltaDecorations([], newDecorations);
+            const r = source_editor_monaco.deltaDecorations([], newDecorations);
             prev = prev.concat(r);
 
             markers.push({
@@ -378,9 +319,9 @@ function parse_compile_message(text, is_runtime) {
             });
         }
     }
-    source_editor.decorations = prev;
-    source_editor.markers = markers
-    monaco.editor.setModelMarkers(source_editor.getModel(), 'compile_message', source_editor.markers)
+    source_editor_monaco.decorations = prev;
+    source_editor_monaco.markers = markers
+    monaco.editor.setModelMarkers(source_editor_monaco.getModel(), 'compile_message', source_editor_monaco.markers)
 }
 
 const cpp_options = [
@@ -421,17 +362,17 @@ function wand_run() {
     set_wand_running_state(true);
 
     const wand_send = {
-        "code": source_editor.getValue(),
-        "stdin": input_editor.getValue(),
+        "code": source_editor_monaco.getValue(),
+        "stdin": input_editor_monaco.getValue(),
         "compiler-option-raw": cpp_options.join('\n'),
         "compiler": "gcc-9.3.0"
             // "compiler": "clang-10.0.0"
     }
     const wand_send_json = JSON.stringify(wand_send);
     // console.log(wand_send_json);
-    monaco_reset_text(output_editor);
-    // monaco_reset_text(message_editor, "Wandboxで実行\n");
-    monaco_reset_text(message_editor, "");
+    monaco_reset_text(output_editor_monaco);
+    // monaco_reset_text(message_editor_monaco, "Wandboxで実行\n");
+    monaco_reset_text(message_editor_monaco, "");
     reset_editor_compile_error_glyph();
     fetch('https://wandbox.org/api/compile.ndjson', {
         method: "POST",
@@ -456,21 +397,21 @@ function wand_run() {
                     return;
                 }
                 if (json.type == "StdOut") {
-                    monaco_add_text(output_editor, json.data);
+                    monaco_add_text(output_editor_monaco, json.data);
                 } else if (json.type == "StdErr") {
-                    monaco_add_text(message_editor, json.data);
+                    monaco_add_text(message_editor_monaco, json.data);
                     parse_compile_message(json.data, true);
                 } else if (json.type == "Control") {
-                    monaco_add_text(message_editor, "[Wandbox] " + json.data + "\n");
+                    monaco_add_text(message_editor_monaco, "[Wandbox] " + json.data + "\n");
                 } else if (json.type == "CompilerMessageS" || json.type == "CompilerMessageE") {
                     // const data = json.data.replace(remove_escape_sequence_pattern, "" ) ;
                     const data = json.data;
-                    monaco_add_text(message_editor, data + "\n");
+                    monaco_add_text(message_editor_monaco, data + "\n");
                     parse_compile_message(data, false);
                 } else if (json.type == "ExitCode") {
-                    monaco_add_text(message_editor, "[ Exit ] " + json.data + "\n");
+                    monaco_add_text(message_editor_monaco, "[ Exit ] " + json.data + "\n");
                 } else if (json.type == "Signal") {
-                    monaco_add_text(message_editor, "[Signal] " + json.data + "\n");
+                    monaco_add_text(message_editor_monaco, "[Signal] " + json.data + "\n");
                 }
             }
             if (done) {
@@ -481,22 +422,12 @@ function wand_run() {
         }
         reader.read().then(readChunk);
     }).catch(error => {
-        monaco_add_text(message_editor, "エラー\n");
-        monaco_add_text(message_editor, error);
+        monaco_add_text(message_editor_monaco, "エラー\n");
+        monaco_add_text(message_editor_monaco, error);
         console.error(error);
         set_wand_running_state(false);
     })
 }
-
-function test1(source_code) {
-    var result = Module.ccall('clicked1', // name of C function
-        'string', // return type
-        ['number', 'string'], // argument types
-        [12345678, source_code]); // arguments
-    console.log("res", result);
-}
-
-
 
 
 

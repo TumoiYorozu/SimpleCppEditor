@@ -2,162 +2,163 @@
 <html>
 
 <head>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-  <script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
-  <script type="text/javascript" src="lib/goldenlayout-1.5.9.min.js"></script>
-  <script type="text/javascript" src="node_modules/monaco-editor/min/vs/loader.js"></script>
-  <link type="text/css" rel="stylesheet" href="lib/goldenlayout-1.5.9-base.css" />
-  <link type="text/css" rel="stylesheet" href="lib/goldenlayout-1.5.9-light-theme.css" />
-  <link type="text/css" rel="stylesheet" href="style.css">
-  <title>Simple C++ Editor</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="lib/goldenlayout-1.5.9.min.js"></script>
+    <script type="text/javascript" src="node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ext-language_tools.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/theme-tomorrow.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/theme-monokai.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/mode-c_cpp.js"></script>
+    <link type="text/css" rel="stylesheet" href="lib/goldenlayout-1.5.9-base.css" />
+    <link type="text/css" rel="stylesheet" href="lib/goldenlayout-1.5.9-light-theme.css" />
+    <link type="text/css" rel="stylesheet" href="style.css">
+    <link type="text/css" rel="stylesheet" href="ace_editor.css">
+    <title>Simple C++ Editor</title>
 </head>
+
 <body style="width: 100%; height: 100%; margin: 0;">
-  <div class="header" id="header" style="width:100%; height:30px">
-    <div class="title" style="width:220px;height:100%; float: left; font-size: large;">
-      Simple C++ Editor
+    <div class="header" id="header" style="width:100%; height:30px">
+        <div class="title" style="width:220px;height:100%; float: left; font-size: large;">
+            Simple C++ Editor
+        </div>
+        <div class="dropdown_menu" style="width:140px;height:100%; float: left">
+            <ul class="nav" style="width:100%">
+                <li class="has-sub" style="width:100%">
+                    <a href="" style="pointer-events: none;">配置リセット</a>
+                    <ul class="sub">
+                        <li>
+                            <a onclick="reset_golden_layout('default');">標準レイアウト</a>
+                        </li>
+                        <li>
+                            <a onclick="reset_golden_layout('landscape');">横長用レイアウト</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="buttons" style="width:20%;height:100%; float: right">
+            <a id="wand_run_btn" onclick="wand_run();" class="btn btn--run" style="width:100%; height:18px; float: right">実行</a>
+        </div>
     </div>
-    <div class="dropdown_menu" style="width:140px;height:100%; float: left">
-      <ul class="nav" style="width:100%">
-        <li class="has-sub" style="width:100%">
-          <a href="" style="pointer-events: none;">配置リセット</a>
-          <ul class="sub">
-            <li>
-              <a onclick="reset_golden_layout('default');">標準レイアウト</a>
-            </li>
-            <li>
-              <a onclick="reset_golden_layout('landscape');">横長用レイアウト</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
+    <div id="golden_layout_container" style="width:calc(100vw - 3px); height:calc(100vh - 33px);">
+        <div style="width: 100%; height: 100%; margin: 0;" id="source_editor_container"></div>
+        <div style="width: 100%; height: 100%; margin: 0;" id="input_editor_container"></div>
+        <div style="width: 100%; height: 100%; margin: 0;" id="output_editor_container"></div>
+        <div style="width: 100%; height: 100%; margin: 0;" id="message_editor_container"></div>
     </div>
-    <div id="buttons" style="width:20%;height:100%; float: right">
-      <a id="wand_run_btn" onclick="wand_run();" class="btn btn--run"
-        style="width:100%; height:18px; float: right">実行</a>
-    </div>
-  </div>
-  <div id="golden_layout_container" style="width:calc(100vw - 3px); height:calc(100vh - 33px);"> </div>
-  <div id="help" style="width: 100%; height: 100%; overflow:auto;">
-    <div>
-      <h2> Simple C++ Editor について</h2>
-      <p>
-        Simple C++ Editor は、Web ブラウザで動作するプログラミング入門者向けのエディタ及び実行環境です。
-        主に競技プログラミング・情報オリンピックなどを始めるプログラミング初心者をターゲットに作られています。
-        全くプログラミングに触れてきた事が無い人にとっては C++ を動かす環境を用意するのも大変ですが、これを使用することで、面倒な環境構築せずとも、C++ のコードを実行することができます。
-      </p>
-      <p>
-        また、一部のエラーメッセージを日本語で補足する機能、エラーの箇所を波線で教えてくれる機能、実行時に発生したエラー（オーバーフロー、配列外参照など）を教えてくれる機能もあり、他の Web で C++
-        を実行できるサイトにはない機能もあります。
-      </p>
-      <h2> 操作方法 </h2>
-      <p>
-        Simple C++ Editor は以下の5つのパートに分かれています。
-      <ul>
-        <li>「ソースコード」</li>
-        <li>「プログラムへの入力」</li>
-        <li>「プログラムの出力」</li>
-        <li>「メッセージ」</li>
-        <li>「使い方」(このページ)</li>
-      </ul>
-      </p>
-      <h3>「ソースコード」エディタ </h3>
-      <p>
-        ここに動かしたいプログラムのコードを記述していきます。右上の「実行」ボタンを押すことで、プログラムを実行する事ができます。
-        「Ctrl」と「Enter」キーを同時に押すことでもプログラムを実行させることができます（Macの場合は「Command」と「Enter」キー）。
-        エディタ上に表示される「・」は半角スペースを示しています。行の先頭や末尾、スペースが2個以上連続している場所を「・」で表示されています。
-      </p>
-      <h3>「プログラムへの入力」エディタ </h3>
-      <p>
-        実行させたプログラムへ入力させるテキストを入れます。例えば C++ では、ソースコードで「<code>int x; std::cin >> x;</code>」と書くことで、整数 <code>x</code>
-        を入力させることができます。プログラムの内容は変えず、プログラムに与える入力を変えることで、同じプログラムを使いまわして様々な入力の計算をさせることができます。
-      </p>
-      <h3>「プログラムの出力」 </h3>
-      <p>
-        実行したプログラムの出力が表示されます。ソースコードで「<code>std::cout << "Hello!" << std::endl;</code>」と書くことで、「Hello!」と表示させたり、「<code>std::cout << x << std::endl;</code>」と書くことで変数
-        <code>x</code> の中身を表示させたりできます。
-      </p>
-      <h3>「メッセージ」 </h3>
-      <p>
-        コンパイルメッセージ、実行時のエラーメッセージ、プログラム中で「<code>std::cerr << "Hello!" << std::endl;</code>」の様に標準エラー出力に出力したテキストが表示されます。エラーに関する情報が表示されるので、ここを見るクセをつけましょう。
-      </p>
-      <p>
-        ここに表示された一部のエラーや警告は、ソースコード上に赤線や黄色線が引かれ、マウスを上に乗せるとメッセージが表示されます。赤はエラーで、C++の構文が間違えていたり実行時にオーバーフローなどのエラーが発生したときに表示されます。黄色は警告で、C++の構文としては正しくて実行はできるけど、変数の初期化を忘れていたりときっと何か間違えているかもしれないときに表示されます。
-      </p>
-      <p>
-        ※ C++
-        のエラーは、1つ発生すると連鎖的に沢山のエラーを発生させてしまうことがあります。沢山エラーが発生しても1つエラーを修正すると正しく動くことは多々あります。とりあえず一番上のエラーを1つ修正したらもう一度実行してみるのも良いです。
-      </p>
-      <h2> C++ の実行に関して</h2>
-      <p>
-        <a href="https://wandbox.org/">Wandbox</a> と言う高機能なプログラム実行Webサービスの<a
-          href="https://github.com/melpon/wandbox/blob/master/kennel2/API.rst">公開API</a>を使用し、プログラムの実行を Wandbox
-        上で行ってもらい、実行結果やメッセージなどを Simple C++ Editor で加工して表示しています。Wandbox
-        は高機能な反面、様々なオプションがあり初心者には混乱のもとであるので、C++学習に特化して機能を絞って、デバッグなどをやりやすくしたのが Simple C++ Editor です。
-      </p>
-      <p>
-        (分かっている人向けの説明:) Simple C++ Editor は、GCC 9.1
-        を使用して、「<code><span id="help_cpp_options"></span></code>」オプションを追加して実行されます。これは AtCoder
-        で2021年11月現在使用されているC++コンパイラと同じバージョンであり、またデバッグ用のオプションを多く追加しています。デバッグに特化した実行なので高速化オプションを付けた C++
-        よりは遅いですが、これはブラウザ上でのコーディングに関しては高速であることよりもバグの検出を重視した方が良いという方針のためです。またデバッグ用のオプションが付いているとはいえ、Python
-        などのスクリプト言語と同等以上の速度は出ます。
-      </p>
-      <h2> ショートカットキー</h2>
-      <p>
-        「ソースコード」エディタ上には様々なショートカットキーがあります。キーボードの以下のキーを使うことで、プログラムを書くのが速くなり、上達への一歩になります。一気に全て覚える必要はありませんが、よく使うキーは覚えておくと良いでしょう。(Mac
-        の場合は「Ctrl」を「Command」に置き換えて読んでください。)
-      <ul>
-        <li>「Ctrl + C」</li>
-        選択範囲をコピーします。何も選択されていないときは行をコピーします。
-        <li>「Ctrl + X」</li>
-        選択範囲を切り取ります。何も選択されていないときは行を切り取ります。行削除としても使えます。
-        <li>「Ctrl + V」</li>
-        コピーや切り取りしたテキストを貼り付けます。
-        <li>「Ctrl + A」</li>
-        テキストを全て選択します。
-        <li>「Ctrl + Z」</li>
-        操作を1つ戻します。
-        <li>「Ctrl + Shift + Z」</li>
-        Ctrl+Z で戻しすぎたものを戻します。
-        <li>「Ctrl + /」</li>
-        選択範囲やカーソル行をコメントにしたり、コメントを元に戻します。
-        <li>「Ctrl + S」</li>
-        テキストの内容をブラウザに保存します(しなくても自動保存されます)。
-        <li>「Ctrl + F」</li>
-        テキストの検索をします。
-        <li>「Ctrl + H」</li>
-        テキストの置き換えをします。変数名を変えたくなったときなどに便利です。
-        <li>「Ctrl + G」</li>
-        指定した行にジャンプします。
-        <li>「Ctrl + D」</li>
-        カーソルのある場所の単語を選択します。
-        <li>「Shift + ←/→」</li>
-        テキストの一部を選択できます。
-        <li>「Ctrl + Shift + ↑/↓」</li>
-        カーソルを上下に増やします。
-        <li>「Alt + ↑/↓」</li>
-        カーソルのある行の内容を、上下の行と交換します。
-        <li>「Alt + Shift + ↑/↓」</li>
-        カーソルのある行の内容を、上下に複製します。
-        <li>「Alt + F8」</li>
-        次のエラー・警告の場所にジャンプします。
-        <li>「Ctrl + Enter」</li>
-        プログラムを実行します。
-        <li>「Tab」</li>
-        行頭のスペース(インデント)を、4の倍数になるまで挿入します。
-        <li>「Ctrl + マウスホイール回転」</li>
-        エディタの文字サイズを変更します。
-        <li>「F1」</li>
-        コマンドパレットを開き、エディタの様々な機能を表示します。
-      </ul>
-      </p>
-      <h2> Simple C++ Editor のコード・保存する情報について </h2>
-      <p>
-        Simple C++ Editor のソースコードは<a href="https://github.com/TumoiYorozu/SimpleCppEditor"> GitHub のプロジェクトページ</a> に公開されています。
-        このエディタはデータを使用者のブラウザのみに保存し、コードの実行は<a href="https://wandbox.org/">Wandbox</a>に任せているため、コードの保存や実行に必要なサーバーは必要ありません。
-      </p>
-    </div>
-    <script type="text/javascript" src="wand_run.js"></script>
-    <script type="text/javascript" src="golden_layout_settings.js"></script>
+    <div id="help" style="width: 100%; height: 100%; overflow:auto;">
+        <div>
+            <h2> Simple C++ Editor について</h2>
+            <p>
+                Simple C++ Editor は、Web ブラウザで動作するプログラミング入門者向けのエディタ及び実行環境です。 主に競技プログラミング・情報オリンピックなどを始めるプログラミング初心者をターゲットに作られています。 全くプログラミングに触れてきた事が無い人にとっては C++ を動かす環境を用意するのも大変ですが、これを使用することで、面倒な環境構築せずとも、C++ のコードを実行することができます。
+            </p>
+            <p>
+                また、一部のエラーメッセージを日本語で補足する機能、エラーの箇所を波線で教えてくれる機能、実行時に発生したエラー（オーバーフロー、配列外参照など）を教えてくれる機能もあり、他の Web で C++ を実行できるサイトにはない機能もあります。
+            </p>
+            <h2> 操作方法 </h2>
+            <p>
+                Simple C++ Editor は以下の5つのパートに分かれています。
+                <ul>
+                    <li>「ソースコード」</li>
+                    <li>「プログラムへの入力」</li>
+                    <li>「プログラムの出力」</li>
+                    <li>「メッセージ」</li>
+                    <li>「使い方」(このページ)</li>
+                </ul>
+            </p>
+            <h3>「ソースコード」エディタ </h3>
+            <p>
+                ここに動かしたいプログラムのコードを記述していきます。右上の「実行」ボタンを押すことで、プログラムを実行する事ができます。 「Ctrl」と「Enter」キーを同時に押すことでもプログラムを実行させることができます（Macの場合は「Command」と「Enter」キー）。 エディタ上に表示される「・」は半角スペースを示しています。行の先頭や末尾、スペースが2個以上連続している場所を「・」で表示されています。
+            </p>
+            <h3>「プログラムへの入力」エディタ </h3>
+            <p>
+                実行させたプログラムへ入力させるテキストを入れます。例えば C++ では、ソースコードで「<code>int x; std::cin >> x;</code>」と書くことで、整数 <code>x</code> を入力させることができます。プログラムの内容は変えず、プログラムに与える入力を変えることで、同じプログラムを使いまわして様々な入力の計算をさせることができます。
+            </p>
+            <h3>「プログラムの出力」 </h3>
+            <p>
+                実行したプログラムの出力が表示されます。ソースコードで「<code>std::cout << "Hello!" << std::endl;</code>」と書くことで、「Hello!」と表示させたり、「<code>std::cout << x << std::endl;</code>」と書くことで変数
+                <code>x</code> の中身を表示させたりできます。
+            </p>
+            <h3>「メッセージ」 </h3>
+            <p>
+                コンパイルメッセージ、実行時のエラーメッセージ、プログラム中で「<code>std::cerr << "Hello!" << std::endl;</code>」の様に標準エラー出力に出力したテキストが表示されます。エラーに関する情報が表示されるので、ここを見るクセをつけましょう。
+            </p>
+            <p>
+                ここに表示された一部のエラーや警告は、ソースコード上に赤線や黄色線が引かれ、マウスを上に乗せるとメッセージが表示されます。赤はエラーで、C++の構文が間違えていたり実行時にオーバーフローなどのエラーが発生したときに表示されます。黄色は警告で、C++の構文としては正しくて実行はできるけど、変数の初期化を忘れていたりときっと何か間違えているかもしれないときに表示されます。
+            </p>
+            <p>
+                ※ C++ のエラーは、1つ発生すると連鎖的に沢山のエラーを発生させてしまうことがあります。沢山エラーが発生しても1つエラーを修正すると正しく動くことは多々あります。とりあえず一番上のエラーを1つ修正したらもう一度実行してみるのも良いです。
+            </p>
+            <h2> C++ の実行に関して</h2>
+            <p>
+                <a href="https://wandbox.org/">Wandbox</a> と言う高機能なプログラム実行Webサービスの<a href="https://github.com/melpon/wandbox/blob/master/kennel2/API.rst">公開API</a>を使用し、プログラムの実行を Wandbox 上で行ってもらい、実行結果やメッセージなどを Simple C++ Editor で加工して表示しています。Wandbox は高機能な反面、様々なオプションがあり初心者には混乱のもとであるので、C++学習に特化して機能を絞って、デバッグなどをやりやすくしたのが
+                Simple C++ Editor です。
+            </p>
+            <p>
+                (分かっている人向けの説明:) Simple C++ Editor は、GCC 9.1 を使用して、「
+                <code><span id="help_cpp_options"></span></code>」オプションを追加して実行されます。これは AtCoder で2021年11月現在使用されているC++コンパイラと同じバージョンであり、またデバッグ用のオプションを多く追加しています。デバッグに特化した実行なので高速化オプションを付けた C++ よりは遅いですが、これはブラウザ上でのコーディングに関しては高速であることよりもバグの検出を重視した方が良いという方針のためです。またデバッグ用のオプションが付いているとはいえ、Python
+                などのスクリプト言語と同等以上の速度は出ます。
+            </p>
+            <h2> ショートカットキー</h2>
+            <p>
+                「ソースコード」エディタ上には様々なショートカットキーがあります。キーボードの以下のキーを使うことで、プログラムを書くのが速くなり、上達への一歩になります。一気に全て覚える必要はありませんが、よく使うキーは覚えておくと良いでしょう。(Mac の場合は「Ctrl」を「Command」に置き換えて読んでください。)
+                <ul>
+                    <li>「Ctrl + C」</li>
+                    選択範囲をコピーします。何も選択されていないときは行をコピーします。
+                    <li>「Ctrl + X」</li>
+                    選択範囲を切り取ります。何も選択されていないときは行を切り取ります。行削除としても使えます。
+                    <li>「Ctrl + V」</li>
+                    コピーや切り取りしたテキストを貼り付けます。
+                    <li>「Ctrl + A」</li>
+                    テキストを全て選択します。
+                    <li>「Ctrl + Z」</li>
+                    操作を1つ戻します。
+                    <li>「Ctrl + Shift + Z」</li>
+                    Ctrl+Z で戻しすぎたものを戻します。
+                    <li>「Ctrl + /」</li>
+                    選択範囲やカーソル行をコメントにしたり、コメントを元に戻します。
+                    <li>「Ctrl + S」</li>
+                    テキストの内容をブラウザに保存します(しなくても自動保存されます)。
+                    <li>「Ctrl + F」</li>
+                    テキストの検索をします。
+                    <li>「Ctrl + H」</li>
+                    テキストの置き換えをします。変数名を変えたくなったときなどに便利です。
+                    <li>「Ctrl + G」</li>
+                    指定した行にジャンプします。
+                    <li>「Ctrl + D」</li>
+                    カーソルのある場所の単語を選択します。
+                    <li>「Shift + ←/→」</li>
+                    テキストの一部を選択できます。
+                    <li>「Ctrl + Shift + ↑/↓」</li>
+                    カーソルを上下に増やします。
+                    <li>「Alt + ↑/↓」</li>
+                    カーソルのある行の内容を、上下の行と交換します。
+                    <li>「Alt + Shift + ↑/↓」</li>
+                    カーソルのある行の内容を、上下に複製します。
+                    <li>「Alt + F8」</li>
+                    次のエラー・警告の場所にジャンプします。
+                    <li>「Ctrl + Enter」</li>
+                    プログラムを実行します。
+                    <li>「Tab」</li>
+                    行頭のスペース(インデント)を、4の倍数になるまで挿入します。
+                    <li>「Ctrl + マウスホイール回転」</li>
+                    エディタの文字サイズを変更します。
+                    <li>「F1」</li>
+                    コマンドパレットを開き、エディタの様々な機能を表示します。
+                </ul>
+            </p>
+            <h2> Simple C++ Editor のコード・保存する情報について </h2>
+            <p>
+                Simple C++ Editor のソースコードは<a href="https://github.com/TumoiYorozu/SimpleCppEditor"> GitHub のプロジェクトページ</a> に公開されています。 このエディタはデータを使用者のブラウザのみに保存し、コードの実行は
+                <a href="https://wandbox.org/">Wandbox</a>に任せているため、コードの保存や実行に必要なサーバーは必要ありません。
+            </p>
+        </div>
+        <script type="text/javascript" src="wand_run.js"></script>
+        <script type="text/javascript" src="golden_layout_settings.js"></script>
+        <script type="text/javascript" src="ace_editor.js"></script>
 </body>
+
 </html>
