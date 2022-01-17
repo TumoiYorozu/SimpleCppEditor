@@ -117,6 +117,7 @@ myLayout.registerComponent('SourceComponent', function(container, componentState
 });
 
 myLayout.on('stateChanged', function() {
+    resize_editors();
     var state = myLayout.toConfig();
     state = JSON.stringify(state);
     localStorage.setItem('GoldenLayout_savedState', state);

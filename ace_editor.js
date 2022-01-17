@@ -1,5 +1,5 @@
 var source_editor = ace.edit("source_editor_container", {
-    theme: "ace/theme/monokai",
+    theme: "ace/theme/textmate",
     minLines: 2
 });
 source_editor.getSession().setMode("ace/mode/c_cpp");
@@ -7,11 +7,11 @@ source_editor.setOptions({
     showPrintMargin: false,
     scrollPastEnd: 0.5,
     showInvisibles: true,
+    showFoldWidgets: false,
 });
 
-
 var input_editor = ace.edit("input_editor_container", {
-    theme: "ace/theme/monokai",
+    theme: "ace/theme/textmate",
     minLines: 2
 });
 input_editor.getSession().setMode("ace/mode/markdown");
@@ -23,7 +23,7 @@ input_editor.setOptions({
 });
 
 var output_editor = ace.edit("output_editor_container", {
-    theme: "ace/theme/monokai",
+    theme: "ace/theme/textmate",
     minLines: 2
 });
 output_editor.getSession().setMode("ace/mode/markdown");
@@ -36,7 +36,7 @@ output_editor.setOptions({
 });
 
 var message_editor = ace.edit("message_editor_container", {
-    theme: "ace/theme/monokai",
+    theme: "ace/theme/textmate",
     minLines: 2
 });
 message_editor.getSession().setMode("ace/mode/markdown");
@@ -90,6 +90,12 @@ function get_editor_text(editor) {
     return editor.getValue();
 }
 
+function resize_editors() {
+    source_editor.resize();
+    input_editor.resize();
+    output_editor.resize();
+    message_editor.resize();
+}
 
 
 var edit_counter = 0;
