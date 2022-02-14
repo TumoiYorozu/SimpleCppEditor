@@ -496,8 +496,48 @@ function test1(source_code) {
     console.log("res", result);
 }
 
+function copy_text(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+    } else if (window.clipboardData) { // for IE
+        window.clipboardData.setData("Text", text);
+    } else {
+        alert("ブラウザがコピーに対応していません。");
+    }
+}
 
+function paste_clipboard(callback_func) {
+    if (navigator.clipboard) {
+        navigator.clipboard.readText().then(function(text) {
+            callback_func(text);
+        });
+    } else if (window.clipboardData) { // for IE
+        var text = window.clipboardData.getData("Text");
+        callback_func(text);
+    } else {
+        alert("ブラウザが貼り付けに対応していません。");
+    }
+}
 
+function copy_src() {
+    copy_text(source_editor.getValue());
+
+    var btn = document.getElementById('src_copy');
+    btn.classList.add('clicked');
+    btn.addEventListener("transitionend", function() {
+        btn.classList.remove('clicked');
+    });
+}
+
+function paste_input() {
+    paste_clipboard((text) => { input_editor.setValue(text) });
+
+    var btn = document.getElementById('in_paste');
+    btn.classList.add('clicked');
+    btn.addEventListener("transitionend", function() {
+        btn.classList.remove('clicked');
+    });
+}
 
 
 

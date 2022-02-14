@@ -47,14 +47,67 @@ a.btn--running {
     pointer-events: none;
 }
 
+a.copy_paste {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    display: inline-block;
+    padding: 5px 5px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background-color: #5f5f5f28;
+    transition-property: background-color;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+}
 
+a.copy_paste:hover {
+    background-color: #f9db925c;
+}
 
+a.copy_paste.clicked {
+    background-color: #37e0de;
+}
 
+.description {
+    display: none;
+    position: absolute;
+    padding: 10px;
+    font-size: 11px;
+    line-height: 1.6em;
+    color: #222;
+    border-radius: 5px;
+    background: #dddddd;
+    width: 100px;
+}
 
+.description:before {
+    content: "";
+    position: absolute;
+    top: -24px;
+    right: 5%;
+    border: 15px solid transparent;
+    border-top: 15px solid #dddddd;
+    margin-left: -15px;
+    transform: rotateZ(180deg);
+}
 
-
-
-
+a.copy_paste:hover .description {
+    display: inline-block;
+    top: 50px;
+    left: -80px;
+}
 
 .dropdown_menu ul {
     margin: 0;
