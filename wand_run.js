@@ -62,6 +62,7 @@ const cpp_editor_options = Object.assign({
     renderWhitespace: true,
     lineNumbersMinChars: 2,
     glyphMargin: true,
+    "bracketPairColorization.enabled": true,
 }, editor_options);
 
 const io_editor_options = Object.assign({
@@ -259,7 +260,7 @@ function get_message_easy_to_understand(text) {
         return m[2] + " の前に、" + m[1] + " が来ることが期待されています。" + did_you_mean;
     }
 
-    if (m = text.match(/stray '\{\d+}' in program/)) {
+    if (m = text.match(/stray '\\\d+' in program/)) {
         return "半角文字以外が混じっています。C++では全角文字・全角スペース・全角記号などは使用できません。" + did_you_mean;
     }
     if (m = text.match(/no match for 'operator(.+?)' \(operand types are '(.+?)'( \{aka.*?'\})? and '(.+?)'/)) {
