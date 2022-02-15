@@ -193,3 +193,7 @@ a.copy_paste:hover .description {
     font-weight: 512;
     color: #bb7000 !important;
 }
+
+#source_editor_container .monaco-editor .mtkw {
+    color: rgba(128, 128, 128, 0.12) !important;
+}
