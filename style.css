@@ -180,3 +180,16 @@ a.copy_paste:hover .description {
 .dropdown_menu .sub.active {
     min-height: 180px;
 }
+
+.monaco-editor .bracket-highlighting-0 {
+    font-weight: 512;
+    color: #2b0fc9 !important;
+}
+.monaco-editor .bracket-highlighting-1 {
+    font-weight: 512;
+    color: #4bb818 !important;
+}
+.monaco-editor .bracket-highlighting-2 {
+    font-weight: 512;
+    color: #bb7000 !important;
+}

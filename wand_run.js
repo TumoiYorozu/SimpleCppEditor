@@ -62,6 +62,7 @@ const cpp_editor_options = Object.assign({
     renderWhitespace: true,
     lineNumbersMinChars: 2,
     glyphMargin: true,
+    "bracketPairColorization.enabled": true,
 }, editor_options);
 
 const io_editor_options = Object.assign({
