@@ -353,7 +353,7 @@ function parse_compile_message(text, is_runtime) {
             const token_end = line_tokens.getEndOffset(line_tokens.findTokenIndexAtOffset(e.col));
             const token_len_A = token_end - e.col;
             const message_token = m[4].match(message_token_pattern);
-            const token_len_B = message_token == null ? token_len_A : message_token.length;
+            const token_len_B = message_token == null ? token_len_A : message_token[1].length;
             const token_len = Math.max(1, (token_end == null ? token_len_B : Math.min(token_len_A, token_len_B)));
             // console.log("line/col", e.line, e.col, token_len_A, token_len_B);
 
@@ -437,7 +437,7 @@ function wand_run() {
     fetch('https://wandbox.org/api/compile.ndjson', {
         method: "POST",
         mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'content-type': 'application/json' },
         body: wand_send_json
     }).then((response) => {
         if (!response.ok) {
