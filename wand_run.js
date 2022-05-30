@@ -256,6 +256,9 @@ function get_message_easy_to_understand(text) {
     if (m = text.match(/expected primary-expression before '(.+?)' token/)) {
         return "演算子「" + m[1] + "」の使い方が間違えています。" + did_you_mean;
     }
+    if (m = text.match(/expected unqualified-id before ';' token/)) {
+        return "「;」の前に、変数名が来ることが期待されています。変数名を忘れていたり、「,」が余分にありませんか。" + did_you_mean;
+    }
     if (m = text.match(/expected (.+?) before (.+)/)) {
         return m[2] + " の前に、" + m[1] + " が来ることが期待されています。" + did_you_mean;
     }
@@ -265,6 +268,10 @@ function get_message_easy_to_understand(text) {
     }
     if (m = text.match(/no match for 'operator(.+?)' \(operand types are '(.+?)'( \{aka.*?'\})? and '(.+?)'/)) {
         return m[2] + " (左辺)と " + m[4] + " (右辺)を演算子「" + m[1] + "」を使って演算はできません。" + did_you_mean;
+    }
+    if (m = text.match(/invalid operands of types '(.+?)'( \{aka.*?'\})? and '<unresolved overloaded function type>' to binary 'operator(.+?)'/)) {
+        return m[1] + " (左辺)を演算子「" + m[3] + "」を使って演算はできません。coutで複数の値を出力する場合は「cout << x, y << endl;」ではなく「cout << x << y << endl;」の様に「<<」で区切ります。" + did_you_mean;
+        // cout << x,y << endl;
     }
     if (m = text.match(/invalid operands of types '(.+?)'( \{aka.*?'\})? and '(.+?)'( \{aka.*?'\})? to binary 'operator(.+?)'/)) {
         return m[1] + " (左辺)と " + m[3] + " (右辺)を演算子「" + m[5] + "」を使って演算はできません。" + did_you_mean;
@@ -306,6 +313,9 @@ function get_message_easy_to_understand(text) {
     }
     if (m = text.match(/statement has no effect/)) {
         return "この文は何の効果ももらたしていません。何か書き間違えをしていませんか。" + did_you_mean;
+    }
+    if (m = text.match(/comparisons like 'X<=Y<=Z' do not have their mathematical meaning/)) {
+        return "C++では「X <= Y <= Z」の様な式もエラーではないですが、恐らく意図した条件式ではありません。代わりに「(X <= Y) && (Y <= Z)」の様に書きます。" + did_you_mean;
     }
     return "" + did_you_mean;
 }
