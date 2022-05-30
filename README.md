@@ -1,4 +1,4 @@
-# SimpleCppEditor
+# C++ Play | SimpleCppEditor
 
 - 全くプログラミングを触れたことが無いような中高生を対象に
 - 主にAtCoderや情報オリンピック、ICPCへの参加を考えている方を想定した
