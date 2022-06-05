@@ -299,6 +299,9 @@ function get_message_easy_to_understand(text) {
     if (m = text.match(/'(.+?)' may be used uninitialized in this function/)) {
         return "変数「" + m[1] + "」は恐らく初期化されていないため、意図しない値が入っています。使用する前に代入をしてください。" + did_you_mean;
     }
+    if (m = text.match(/'(.+?)' is used uninitialized in this function/)) {
+        return "変数「" + m[1] + "」は初期化されていないため、意図しない値が入っています。使用する前に代入をしてください。" + did_you_mean;
+    }
     if (m = text.match(/unused variable '(.+?)'/)) {
         return "変数「" + m[1] + "」は使用されていません。" + did_you_mean;
     }
@@ -316,6 +319,17 @@ function get_message_easy_to_understand(text) {
     }
     if (m = text.match(/comparisons like 'X<=Y<=Z' do not have their mathematical meaning/)) {
         return "C++では「X <= Y <= Z」の様な式もエラーではないですが、恐らく意図した条件式ではありません。代わりに「(X <= Y) && (Y <= Z)」の様に書きます。" + did_you_mean;
+    }
+    if (m = text.match(/suggest parentheses around comparison in operand of '(.+?)'/)) {
+        return "演算子「" + m[1] + "」の使い方が曖昧そうで、思った計算結果にならないかもしれません。() を使って計算順序を明確にしたり、そもそも「" + m[1] + "」を他の記号と間違えていませんか。" + did_you_mean;
+    }
+    if (m = text.match(/logical not is only applied to the left hand side of comparison/)) {
+        return "「!」演算子は優先順位が高いので、もしかしたら意図通りの計算結果にならないかもしれません。() を使って計算順序を明確にしましょう。" + did_you_mean;
+        // 「if (!a > 1)」
+    }
+    if (m = text.match(/multi-character character constant/)) {
+        return "文字列は「'abc'」ではなく「\"abc\"」の様に \"\" で囲みます。" + did_you_mean;
+        // 「'abc'」
     }
     return "" + did_you_mean;
 }
@@ -402,6 +416,12 @@ const cpp_options = [
     "-Wfloat-equal", // 浮動小数点数を == で比較していると警告する
     "-Winit-self", // int i = i; など未定義の変数が自分を初期化すると警告する
     "-Wshadow", // 名前被りに対して警告する
+    "-Wlogical-op", // 「(x == 10 && x != 10)」みたいな式
+    "-Werror=uninitialized", // 初期化してない変数を使った
+    "-Werror=maybe-uninitialized", // 初期化してない変数を使った
+    "-Werror=parentheses",         // 「(1 <= x < 10)」「if(x=10)」みたいな式
+    "-Werror=logical-not-parentheses", // 「if (!a > 1)」みたいな式
+    "-Werror=multichar", // 'abc'
     "-g",
     "-fsanitize=undefined",
     "-D_GLIBCXX_DEBUG",
